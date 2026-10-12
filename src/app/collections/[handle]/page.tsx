@@ -2,6 +2,8 @@ import { getProductsByCollection } from "@/lib/products";
 import ProductsCard from "@/modules/components/common/ProductsCard";
 import { notFound } from "next/navigation";
 
+export const instant = false;
+
 interface CollectionPageProps {
   params: Promise<{
     handle: string;

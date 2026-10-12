@@ -1,16 +1,22 @@
-"use client"
+export const instant = false;
 
-import { useParams } from "next/navigation";
-
-const CategoryPage = async () => {
-    const params = useParams();
-    const { category } = await params;
-
-
-    //  call api for this category
-    return (
-        <div>{category}</div>
-    )
+interface CategoryPageProps {
+  params: Promise<{
+    category: string;
+  }>;
 }
 
-export default CategoryPage
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
+
+  // call api for this category
+  return (
+    <main className="min-h-screen p-8 bg-white text-gray-900">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-black uppercase text-black mb-2">
+          {category}
+        </h1>
+      </div>
+    </main>
+  );
+}
