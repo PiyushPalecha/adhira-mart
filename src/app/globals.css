@@ -14,6 +14,9 @@
   --background: #ffffff;
   --foreground: #000000;
   --accent: #ff3333;
+  --ivory: #f5f3f1;
+  --warm-grey: #eeebe8;
+  --taupe: #8a8178;
 }
 
 @theme {
@@ -30,6 +33,9 @@
   --color-background: #ffffff;
   --color-foreground: #000000;
   --color-accent: #ff3333;
+  --color-ivory: #f5f3f1;
+  --color-warm-grey: #eeebe8;
+  --color-taupe: #8a8178;
 }
 
 /* Explicit utility classes for global color consistency */
@@ -63,4 +69,16 @@
 
 .bg-surface {
   background-color: var(--surface);
+}
+
+.bg-ivory {
+  background-color: var(--ivory);
+}
+
+.bg-warm-grey {
+  background-color: var(--warm-grey);
+}
+
+.text-taupe {
+  color: var(--taupe);
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "../modules/components/common/Navbar";
+import Footer from "../modules/components/common/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SHOP.CO | AdhiraMart",
-  description: "Find clothes that match your style at SHOP.CO",
+  title: "Adhira Mart",
+  description: "Find clothes that match your style at Adhira Mart",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -26,9 +27,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-white text-primary">
         <Navbar />
-        {children}
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
 }
+
 

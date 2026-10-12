@@ -51,7 +51,7 @@ export default function Navbar() {
         aria-label="Main Navigation"
         className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 h-20 md:h-24 flex items-center justify-between gap-6 xl:gap-10"
       >
-        {/* Left Section: Mobile Toggle & SHOP.CO Logo */}
+        {/* Left Section: Mobile Toggle & Adhira Mart Logo */}
         <div className="flex items-center gap-3 md:gap-4 shrink-0">
           {/* Mobile Hamburger Menu Toggle */}
           <button
@@ -92,12 +92,12 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Logo SHOP.CO */}
+          {/* Logo Adhira Mart */}
           <Link
             href="/"
             className="text-[28px] sm:text-[32px] font-black tracking-[-0.04em] text-primary select-none leading-none hover:opacity-90 transition-opacity"
           >
-            SHOP.CO
+            Adhira Mart
           </Link>
         </div>
 
@@ -115,9 +115,8 @@ export default function Navbar() {
             >
               <span>Shop</span>
               <svg
-                className={`w-4 h-4 text-primary transition-transform duration-200 ${
-                  isShopDropdownOpen ? "rotate-180" : ""
-                }`}
+                className={`w-4 h-4 text-primary transition-transform duration-200 ${isShopDropdownOpen ? "rotate-180" : ""
+                  }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -385,9 +384,8 @@ export default function Navbar() {
                 >
                   <span>Shop</span>
                   <svg
-                    className={`w-5 h-5 transition-transform duration-200 ${
-                      isShopDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-5 h-5 transition-transform duration-200 ${isShopDropdownOpen ? "rotate-180" : ""
+                      }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
