@@ -98,3 +98,221 @@ export async function getProductsByCollection(handle: string): Promise<ShopifyPr
 
   return data.collection.products.edges.map((edge) => edge.node);
 }
+
+export interface ShopifyProductImage {
+  id: string;
+  url: string;
+  altText: string | null;
+  width?: number;
+  height?: number;
+}
+
+export interface ShopifyProductVariant {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  price: {
+    amount: string;
+    currencyCode: string;
+  };
+  compareAtPrice: {
+    amount: string;
+    currencyCode: string;
+  } | null;
+  selectedOptions: Array<{
+    name: string;
+    value: string;
+  }>;
+  image?: ShopifyProductImage | null;
+}
+
+export interface ShopifyProductOption {
+  id: string;
+  name: string;
+  values: string[];
+}
+
+export interface ShopifyProductDetail {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  descriptionHtml?: string;
+  availableForSale: boolean;
+  vendor?: string;
+  productType?: string;
+  tags?: string[];
+  images: {
+    nodes: ShopifyProductImage[];
+  };
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  compareAtPriceRange?: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice?: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  options: ShopifyProductOption[];
+  variants: {
+    nodes: ShopifyProductVariant[];
+  };
+}
+
+const PRODUCT_DETAIL_FRAGMENT = `
+  id
+  title
+  handle
+  description
+  descriptionHtml
+  availableForSale
+  vendor
+  productType
+  tags
+  images(first: 20) {
+    nodes {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+  priceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+    maxVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  compareAtPriceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+    maxVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  options {
+    id
+    name
+    values
+  }
+  variants(first: 50) {
+    nodes {
+      id
+      title
+      availableForSale
+      price {
+        amount
+        currencyCode
+      }
+      compareAtPrice {
+        amount
+        currencyCode
+      }
+      selectedOptions {
+        name
+        value
+      }
+      image {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
+  }
+`;
+
+interface SingleProductResponse {
+  product: ShopifyProductDetail | null;
+}
+
+export async function getProductById(id: string): Promise<ShopifyProductDetail | null> {
+  const gid = id.startsWith("gid://shopify/Product/")
+    ? id
+    : `gid://shopify/Product/${id}`;
+
+  const query = `
+    query getProductById($id: ID!) {
+      product(id: $id) {
+        ${PRODUCT_DETAIL_FRAGMENT}
+      }
+    }
+  `;
+
+  try {
+    const data = await shopifyFetch<SingleProductResponse>({
+      query,
+      variables: { id: gid },
+    });
+    return data.product;
+  } catch (error) {
+    console.error(`Error fetching product by ID ${id}:`, error);
+    return null;
+  }
+}
+
+export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
+  const query = `
+    query getProductByHandle($handle: String!) {
+      product(handle: $handle) {
+        ${PRODUCT_DETAIL_FRAGMENT}
+      }
+    }
+  `;
+
+  try {
+    const data = await shopifyFetch<SingleProductResponse>({
+      query,
+      variables: { handle },
+    });
+    return data.product;
+  } catch (error) {
+    console.error(`Error fetching product by handle ${handle}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Universal product resolver: accepts numeric ID, Shopify GID, or handle.
+ * Tries by ID first if identifier is numeric or GID; otherwise tries by handle.
+ * Falls back if initial lookup does not yield a product.
+ */
+export async function getProduct(identifier: string): Promise<ShopifyProductDetail | null> {
+  if (!identifier) return null;
+
+  const isGid = identifier.startsWith("gid://shopify/Product/");
+  const isNumeric = /^\d+$/.test(identifier);
+
+  if (isGid || isNumeric) {
+    const product = await getProductById(identifier);
+    if (product) return product;
+    // Fall back to handle just in case a handle happens to be numeric
+    return await getProductByHandle(identifier);
+  } else {
+    const product = await getProductByHandle(identifier);
+    if (product) return product;
+    // Fall back to ID
+    return await getProductById(identifier);
+  }
+}
