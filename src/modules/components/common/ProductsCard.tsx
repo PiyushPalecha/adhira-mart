@@ -12,12 +12,13 @@ interface ProductsCardProps {
 
 export default function ProductsCard({
     product,
+    rating = "4.5/5",
 }: ProductsCardProps) {
     const primaryImage = product.featuredImage;
     const minPrice = product.priceRange.minVariantPrice;
 
     return (
-        <Link href={`/product/${product.handle}`} className="group block">
+        <Link href={`/products/${product.handle}`} className="group block">
             <div className="flex flex-col">
                 {/* Dynamic Image Container */}
                 <div className="relative w-full h-72 bg-[#F0EEED] rounded-[20px] overflow-hidden mb-4 flex items-center justify-center">

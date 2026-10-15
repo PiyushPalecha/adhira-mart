@@ -3,11 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCart } from "@/modules/context/CartContext";
 
 export default function Navbar() {
   const router = useRouter();
-  const { cart, openCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
@@ -158,10 +156,10 @@ export default function Navbar() {
           </div>
 
           <Link
-            href="/collections/new-arrivals"
+            href="/on-sale"
             className="text-primary hover:text-muted font-normal transition-colors py-2"
           >
-            Recommended Products
+            On Sale
           </Link>
 
           <Link
@@ -169,6 +167,13 @@ export default function Navbar() {
             className="text-primary hover:text-muted font-normal transition-colors py-2"
           >
             New Arrivals
+          </Link>
+
+          <Link
+            href="/brands"
+            className="text-primary hover:text-muted font-normal transition-colors py-2"
+          >
+            Brands
           </Link>
         </div>
 
@@ -255,10 +260,6 @@ export default function Navbar() {
           {/* Cart Icon */}
           <Link
             href="/cart"
-            onClick={(e) => {
-              e.preventDefault();
-              openCart();
-            }}
             className="p-1.5 rounded-full text-primary hover:opacity-75 transition-opacity relative flex items-center justify-center group"
             aria-label="Cart"
           >
@@ -277,11 +278,6 @@ export default function Navbar() {
                 d="M2.5 3.5h2.8l2.6 11.2a1.5 1.5 0 001.46 1.16h8.74a1.5 1.5 0 001.46-1.16l1.8-8.2H6.2"
               />
             </svg>
-            {cart && cart.totalQuantity > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center animate-in zoom-in">
-                {cart.totalQuantity}
-              </span>
-            )}
           </Link>
 
           {/* User Profile / Account Icon */}
@@ -420,11 +416,11 @@ export default function Navbar() {
               </div>
 
               <Link
-                href="/collections/new-arrivals"
+                href="/on-sale"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-lg font-medium text-primary py-3 border-b border-border hover:text-muted transition-colors"
               >
-                Recommended Products
+                On Sale
               </Link>
 
               <Link
@@ -434,42 +430,39 @@ export default function Navbar() {
               >
                 New Arrivals
               </Link>
+
+              <Link
+                href="/brands"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-medium text-primary py-3 border-b border-border hover:text-muted transition-colors"
+              >
+                Brands
+              </Link>
             </div>
 
             {/* Quick Links in Mobile Drawer */}
             <div className="mt-auto pt-4 border-t border-border flex flex-col gap-3">
               <Link
                 href="/cart"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMobileMenuOpen(false);
-                  openCart();
-                }}
-                className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-secondary text-primary font-medium text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-secondary text-primary font-medium text-sm"
               >
-                <div className="flex items-center gap-3">
-                  <svg
-                    className="w-5 h-5 text-primary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.8"
-                  >
-                    <circle cx="9" cy="20" r="1.5" />
-                    <circle cx="18" cy="20" r="1.5" />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.5 3.5h2.8l2.6 11.2a1.5 1.5 0 001.46 1.16h8.74a1.5 1.5 0 001.46-1.16l1.8-8.2H6.2"
-                    />
-                  </svg>
-                  <span>Shopping Cart</span>
-                </div>
-                {cart && cart.totalQuantity > 0 && (
-                  <span className="bg-primary text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                    {cart.totalQuantity}
-                  </span>
-                )}
+                <svg
+                  className="w-5 h-5 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.8"
+                >
+                  <circle cx="9" cy="20" r="1.5" />
+                  <circle cx="18" cy="20" r="1.5" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.5 3.5h2.8l2.6 11.2a1.5 1.5 0 001.46 1.16h8.74a1.5 1.5 0 001.46-1.16l1.8-8.2H6.2"
+                  />
+                </svg>
+                <span>Shopping Cart</span>
               </Link>
 
               <Link
